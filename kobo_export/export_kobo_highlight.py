@@ -4,7 +4,6 @@ import tempfile
 import shutil
 from pprint import pprint
 
-
 #%%
 tmp_dir = tempfile.gettempdir()
 src_db_path = "/mnt/c/Users/fridh/AppData/Local/Kobo/Kobo Desktop Edition/Kobo.sqlite"
