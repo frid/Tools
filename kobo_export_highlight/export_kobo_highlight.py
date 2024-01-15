@@ -4,9 +4,25 @@ import tempfile
 import shutil
 from pprint import pprint
 
+#%% parse argument
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("db_path", help="Path to kobo.sql (Example: \"/path/to/Kobo.sqlite\")", default=None)
+parser.add_argument("out_csv_path", help="Path to output .csv file (Default: ./test.csv)", default=None)
+parser.add_argument("--encode", help="file encoding (Default: cp950)", default="cp950")
+args = parser.parse_args()
+print("db_path: ", args.db_path)
+print("out_csv_path: ", args.out_csv_path)
+
+import sys
+
+
 #%%
 tmp_dir = tempfile.gettempdir()
-src_db_path = "/mnt/c/Users/fridh/AppData/Local/Kobo/Kobo Desktop Edition/Kobo.sqlite"
+if (args.db_path==None):
+  src_db_path = "/mnt/c/Users/fridh/AppData/Local/Kobo/Kobo Desktop Edition/Kobo.sqlite"
+else:
+  src_db_path = args.db_path
 db_path = tmp_dir + "/Kobo.sqlite"
 shutil.copy(src_db_path, db_path)
 
@@ -65,4 +81,14 @@ for id in chapter_ids:
   df[0].replace(id, chapter_name, inplace=True)
 
 # %%
-df.to_csv("./test.csv", encoding='cp950')
+csv_path = []
+if args.out_csv_path == None:
+  csv_path = "./test.csv"
+else:
+  csv_path = args.out_csv_path
+
+file_encoding = "cp950"
+if not args.encoding:
+  file_encoding = args.encoding
+
+df.to_csv(csv_path, encoding=file_encoding)
